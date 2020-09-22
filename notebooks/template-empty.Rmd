@@ -26,8 +26,7 @@ theme_set(theme_minimal(base_size = 14))
 ### Parameters
 
 ```{r}
-YEARS <- 2016:2018  # 2016 represents the 2016/17 season
-DIVISION <- 0  # 0 = Premier League; 4 = Conference League
+DATA_PATH <- "../resources/match_data.csv"
 # TODO: Create a variable (constant) called `MAX_GOALS` with a value of 7 
 "____________"  # maximum number of goals to predict probability of
 SEED <- 123  # random seed to ensure reproducibility
@@ -40,7 +39,7 @@ SEED <- 123  # random seed to ensure reproducibility
 ```{r warning=FALSE}
 # Import data set (Premier League 2016/17-2018/19)
 # Data source: https://www.football-data.co.uk/englandm.php
-match_data <- tibble(read.csv("../resources/match_data.csv"))
+match_data <- tibble(read.csv(DATA_PATH))
 ```
 
 ```{r}

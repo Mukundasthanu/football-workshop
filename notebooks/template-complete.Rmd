@@ -11,9 +11,7 @@ output:
 
 ```{r message=FALSE}
 library(dplyr)  # data manipulation
-library(footballdatr)  # football data
 library(ggplot2)  # visualisation
-library(purrr)  # iteration
 library(tidyr)  # tidying data
 ```
 
@@ -38,19 +36,8 @@ SEED <- 123  # random seed to ensure reproducibility
 ### Import
 
 ```{r warning=FALSE}
-# Fetch data for multiple years and bind by rows into one large dataframe
-match_data <- map_dfr(
-  2016:2018,
-  ~fetch_data("England", DIVISION, .)
-)
-```
-
-### Cleaning
-
-```{r}
-# Select columns of interest
-match_data <- match_data %>%
-  select(home, away, hgoal, agoal)
+# Import data set (Premier League 2016/17-2018/19)
+match_data <- tibble(read.csv("../resources/match_data.csv"))
 ```
 
 ### Transformation

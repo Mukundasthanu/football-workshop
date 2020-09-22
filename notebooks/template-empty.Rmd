@@ -11,11 +11,9 @@ output:
 
 ```{r message=FALSE}
 library(dplyr)  # data manipulation
-library(footballdatr)  # football data
 library(ggplot2)  # visualisation
-# TODO: Import the package `purrr` for the purpose of 'iteration'
-"________________________"
-library(tidyr)  # tidying data
+# TODO: Import the package `tidyr` for the purpose of "tidying data"
+"____________________________"
 ```
 
 ### Graphical Settings
@@ -39,31 +37,13 @@ SEED <- 123  # random seed to ensure reproducibility
 
 ### Import
 
-```{r}
-fetch_data("England", DIVISION, .)
-```
-
-
 ```{r warning=FALSE}
-# Fetch data for multiple years and bind by rows into one large dataframe
-match_data <- map_dfr(
-  # TODO: Map the constant `YEARS` onto the function `fetch_data`
-  "___",
-  ~fetch_data("England", DIVISION, .)
-)
+# Import data set (Premier League 2016/17-2018/19)
+match_data <- tibble(read.csv("../resources/match_data.csv"))
 ```
 
 ```{r}
 # CKPT: What columns does `match_data` have? How many rows are there?
-```
-
-### Cleaning
-
-```{r}
-# Select columns of interest
-match_data <- match_data %>%
-  # TODO: Select only the columns `home`, `away`, `hgoal`, and `agoal`
-  "______________________________"
 ```
 
 ### Transformation

@@ -39,6 +39,7 @@ SEED <- 123  # random seed to ensure reproducibility
 
 ```{r warning=FALSE}
 # Import data set (Premier League 2016/17-2018/19)
+# Data source: https://www.football-data.co.uk/englandm.php
 match_data <- tibble(read.csv("../resources/match_data.csv"))
 ```
 

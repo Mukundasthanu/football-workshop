@@ -1,0 +1,231 @@
+---
+title: "Football Match Score Prediction"
+subtitle: "Completed Template"
+output:
+  html_notebook: default
+---
+
+## Setup
+
+### Package Import
+
+```{r message=FALSE}
+library(dplyr)  # data manipulation
+library(footballdatr)  # football data
+library(ggplot2)  # visualisation
+library(purrr)  # iteration
+library(tidyr)  # tidying data
+```
+
+### Graphical Settings
+
+```{r}
+# Default ggplot2 theme
+theme_set(theme_minimal(base_size = 14))
+```
+
+### Parameters
+
+```{r}
+YEARS <- 2016:2018  # 2016 represents the 2016/17 season
+DIVISION <- 0  # 0 = Premier League; 4 = Conference League
+MAX_GOALS <- 7  # maximum number of goals to predict probability of
+SEED <- 123  # random seed to ensure reproducibility
+```
+
+## Data Preparation
+
+### Import
+
+```{r warning=FALSE}
+# Fetch data for multiple years and bind by rows into one large dataframe
+match_data <- map_dfr(
+  2016:2018,
+  ~fetch_data("England", DIVISION, .)
+)
+```
+
+### Cleaning
+
+```{r}
+# Select columns of interest
+match_data <- match_data %>%
+  select(home, away, hgoal, agoal)
+```
+
+### Transformation
+
+```{r}
+# Combine home and away goals into same column
+goal_data <- bind_rows(
+  match_data %>%
+    select(team = home, opponent = away, goal = hgoal) %>%
+    mutate(ground = 'Home'),
+  match_data %>%
+    select(team = away, opponent = home, goal = agoal) %>%
+    mutate(ground = 'Away')
+)
+```
+
+## Exploratory Analysis
+
+### Score Distribution
+
+```{r}
+match_data %>%
+  count(hgoal, agoal) %>%
+  ggplot(aes(x = hgoal, y = agoal)) +
+    geom_tile(aes(fill = n)) +
+    geom_text(aes(label = n), col = 'white') +
+    labs(x = "Home Goals", y = "Away Goals", fill = "Count")
+```
+
+### Home Advantage
+
+```{r fig.width=4, fig.height=4}
+goal_data %>%
+  group_by(ground) %>%
+  summarise(avg_goal = mean(goal), .groups = 'drop') %>%
+  ggplot(aes(x = ground, y = avg_goal, fill = ground)) +
+    geom_col(show.legend = FALSE, col = 'black') +
+    labs(x = "Ground", y = "Average Number of Goals")
+```
+
+### Team Rankings
+
+```{r}
+goal_data %>%
+  group_by(team) %>%
+  summarise(avg_goal = mean(goal), .groups = 'drop') %>%
+  mutate(team = reorder(team, avg_goal)) %>%
+  ggplot(aes(x = team, y = avg_goal, fill = avg_goal)) +
+    geom_col(show.legend = FALSE, col = 'black') +
+    labs(x = "Team", y = "Average Number of Goals") +
+    scale_fill_viridis_c() +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+## Modelling
+
+### Train-test Split
+
+```{r}
+# Sample rows
+set.seed(SEED)
+sample_size <- round(0.8 * nrow(goal_data))
+train_idxs <- sample(seq_len(nrow(goal_data)), sample_size)
+# Make split
+train_data <- goal_data[train_idxs,]
+test_data <- goal_data[-train_idxs,]
+```
+
+### Team-only Model
+
+#### Fitting
+
+```{r}
+mod1 <- glm(
+  goal ~ team + opponent + 0,
+  family = poisson(link = log),
+  data = train_data
+)
+```
+
+#### Evaluation
+
+```{r}
+test_data$pred1 <- round(predict(mod1, test_data, type = 'response'))
+
+test_data %>%
+  count(goal, pred1) %>%
+  ggplot(aes(goal, pred1)) +
+    geom_tile(aes(fill = n)) +
+    geom_text(aes(label = n), col = 'white') +
+    geom_abline(col = 'red', alpha = 0.5, size = 2) +
+    labs(x = "Truth", y = "Prediction", fill = "Count")
+```
+
+```{r}
+test_data %>%
+  mutate(
+    squared_error0 = (round(mean(train_data$goal)) - goal) ^ 2,  # null model
+    squared_error1 = (pred1 - goal) ^ 2
+  ) %>%
+  summarise(
+    rmse0 = sqrt(mean(squared_error0)),
+    rmse1 = sqrt(mean(squared_error1))
+  )
+```
+
+### Including Home Advantage
+
+#### Fitting
+
+```{r}
+mod2 <- glm(
+  goal ~ team + opponent + ground + 0,
+  family = poisson(link = log),
+  data = train_data
+)
+```
+
+#### Evaluation
+
+```{r}
+test_data$pred2 <- round(predict(mod2, test_data, type = 'response'))
+
+test_data %>%
+  count(goal, pred2) %>%
+  ggplot(aes(goal, pred2)) +
+    geom_tile(aes(fill = n)) +
+    geom_text(aes(label = n), col = 'white') +
+    geom_abline(col = 'red', alpha = 0.5, size = 2) +
+    labs(x = "Truth", y = "Prediction", fill = "Count")
+```
+
+```{r}
+test_data %>%
+  mutate(
+    squared_error0 = (round(mean(train_data$goal)) - goal) ^ 2,  # null model
+    squared_error1 = (pred1 - goal) ^ 2,
+    squared_error2 = (pred2 - goal) ^ 2
+  ) %>%
+  summarise(
+    rmse0 = sqrt(mean(squared_error0)),
+    rmse1 = sqrt(mean(squared_error1)),
+    rmse2 = sqrt(mean(squared_error2))
+  )
+```
+
+### Prediction
+
+```{r}
+hgoal_mean <- predict(
+  mod2,
+  tibble(
+    team = "Man United",
+    opponent = "Stoke",
+    ground = "Home"),
+  type = 'response'
+)
+
+agoal_mean <- predict(
+  mod2,
+  tibble(
+    team = "Stoke",
+    opponent = "Man United",
+    ground = "Away"),
+  type = 'response'
+)
+
+outcome_probs <- tibble(
+  hgoal = rep(0:MAX_GOALS, each = MAX_GOALS + 1),
+  agoal = rep(0:MAX_GOALS, times = MAX_GOALS + 1)
+) %>%
+  mutate(prob = round(dpois(hgoal, hgoal_mean) * dpois(agoal, agoal_mean), 2))
+
+outcome_probs %>%
+  ggplot(aes(hgoal, agoal)) +
+    geom_tile(aes(fill = prob)) +
+    geom_text(aes(label = prob), col = 'white', size = 4) +
+    labs(x = "Home Goals", y = "Away Goals", fill = "Predicted\nProbability")
+```

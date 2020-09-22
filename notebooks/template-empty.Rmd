@@ -1,0 +1,301 @@
+---
+title: "Football Match Score Prediction"
+subtitle: "Empty Template"
+output:
+  html_notebook: default
+---
+
+## Setup
+
+### Package Import
+
+```{r message=FALSE}
+library(dplyr)  # data manipulation
+library(footballdatr)  # football data
+library(ggplot2)  # visualisation
+# TODO: Import the package `purrr` for the purpose of 'iteration'
+"________________________"
+library(tidyr)  # tidying data
+```
+
+### Graphical Settings
+
+```{r}
+# Default ggplot2 theme
+theme_set(theme_minimal(base_size = 14))
+```
+
+### Parameters
+
+```{r}
+YEARS <- 2016:2018  # 2016 represents the 2016/17 season
+DIVISION <- 0  # 0 = Premier League; 4 = Conference League
+# TODO: Create a variable (constant) called `MAX_GOALS` with a value of 7 
+"____________"  # maximum number of goals to predict probability of
+SEED <- 123  # random seed to ensure reproducibility
+```
+
+## Data Preparation
+
+### Import
+
+```{r}
+fetch_data("England", DIVISION, .)
+```
+
+
+```{r warning=FALSE}
+# Fetch data for multiple years and bind by rows into one large dataframe
+match_data <- map_dfr(
+  # TODO: Map the constant `YEARS` onto the function `fetch_data`
+  "___",
+  ~fetch_data("England", DIVISION, .)
+)
+```
+
+```{r}
+# CKPT: What columns does `match_data` have? How many rows are there?
+```
+
+### Cleaning
+
+```{r}
+# Select columns of interest
+match_data <- match_data %>%
+  # TODO: Select only the columns `home`, `away`, `hgoal`, and `agoal`
+  "______________________________"
+```
+
+### Transformation
+
+```{r}
+# Combine home and away goals into same column
+goal_data <- bind_rows(
+  match_data %>%
+    select(team = home, opponent = away, goal = hgoal) %>%
+    mutate(ground = 'Home'),
+  match_data %>%
+    select(team = away, opponent = home, goal = agoal) %>%
+    # TODO: Create a column called `ground` with every value set to 'Away'
+    "_____________________"
+)
+```
+
+```{r}
+# CKPT: What do the top and bottom few rows of `goal_data` look like?
+```
+
+## Exploratory Analysis
+
+### Score Distribution
+
+```{r}
+# CKPT: What does `count(match_data, hgoal, agoal)` do?
+```
+
+```{r}
+match_data %>%
+  count(hgoal, agoal) %>%
+  ggplot(aes(x = hgoal, y = agoal)) +
+    geom_tile(aes(fill = n)) +
+    # TODO: Add a `text` geometry, mapping `n` to the `label` aesthetic
+    "________________________________________"
+    # TODO: Add labels to the axes and legend
+    "______________________________________________________"
+```
+
+### Home Advantage
+
+```{r}
+# CKPT: What does the dataframe being piped into `ggplot` look like?
+```
+
+```{r fig.width=4, fig.height=4}
+goal_data %>%
+  group_by(ground) %>%
+  summarise(avg_goal = mean(goal), .groups = 'drop') %>%
+  # TODO: Add sensible aesthetic mappings for `x`, `y`, and `fill`
+  ggplot(aes("_____________________________________")) +
+    geom_col(show.legend = FALSE, col = 'black') +
+    labs(x = "Ground", y = "Average Number of Goals")
+```
+
+### Team Rankings
+
+```{r}
+# TODO: repeat the above grouping a summarising for `team` rather than `ground`
+"_______" %>%
+  "____________" %>%
+  "________________________________________________" %>%
+  mutate(team = reorder(team, avg_goal)) %>%
+  ggplot(aes(x = team, y = avg_goal, fill = avg_goal)) +
+    geom_col(show.legend = FALSE, col = 'black') +
+    labs(x = "Team", y = "Average Number of Goals") +
+    scale_fill_viridis_c() +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+## Modelling
+
+### Train-test Split
+
+```{r}
+# Sample rows
+set.seed(SEED)
+sample_size <- round(0.8 * nrow(goal_data))
+train_idxs <- sample(seq_len(nrow(goal_data)), sample_size)
+# Make split
+train_data <- goal_data[train_idxs,]
+test_data <- goal_data[-train_idxs,]
+```
+
+```{r}
+# CKPT: How many rows are in both `train_data` and `test_data`?
+```
+
+### Team-only Model
+
+#### Fitting
+
+```{r}
+mod1 <- glm(
+  # TODO: fit a Poisson model to predict `goals` from `team` and `opponent`
+  # with a zero intercept
+  goal ~ team + opponent + 0,
+  family = poisson(link = log),
+  data = train_data
+)
+```
+
+```{r}
+# CKPT: View the model summary. How many goals does Stoke typically score?
+# What is the expected difference in goals when playing Hull compared to Fulham?
+```
+
+#### Evaluation
+
+```{r}
+test_data$pred1 <- round(predict(mod1, test_data, type = 'response'))
+```
+
+```{r}
+# CKPT: View the first rows of `test_data` now that predictions have been added
+```
+
+```{r}
+test_data %>%
+  # TODO: Count how many times each pair of `goal` and `pred1` appears
+  # Hint: See 'Score Distribution'
+  "________________" %>%
+  ggplot(aes(goal, pred1)) +
+    # TODO: Add a tile geometry to filled according to `n`
+    geom_tile(aes(fill = n)) +
+    geom_text(aes(label = n), col = 'white') +
+    geom_abline(col = 'red', alpha = 0.5, size = 2) +
+    labs(x = "Truth", y = "Prediction", fill = "Count")
+```
+
+```{r}
+test_data %>%
+  mutate(
+    squared_error0 = (round(mean(train_data$goal)) - goal) ^ 2,  # null model
+    squared_error1 = (pred1 - goal) ^ 2
+  ) %>%
+  summarise(
+    rmse0 = sqrt(mean(squared_error0)),
+    # TODO: Calculate the RMSE for model 1
+    "________________________________"
+  )
+```
+
+### Including Home Advantage
+
+#### Fitting
+
+```{r}
+# TODO: Add `ground` to the glm from before to create `mod2`
+mod2 <- glm(
+  "_________________________________",
+  "__________________________",
+  "__________________________"
+)
+```
+
+#### Evaluation
+
+```{r}
+# TODO: Make predictions using `mod2`
+test_data$pred2 <- "________________________________________________"
+
+test_data %>%
+  count(goal, pred2) %>%
+  ggplot(aes(goal, pred2)) +
+    geom_tile(aes(fill = n)) +
+    geom_text(aes(label = n), col = 'white') +
+    # TODO: Add the line y=x in red, with size 2, and transparency 0.5
+    # Hint: See corresponding code for team-only model
+    "_______________________________________________"
+    labs(x = "Truth", y = "Prediction", fill = "Count")
+```
+
+```{r}
+test_data %>%
+  mutate(
+    # TODO: Calculate the squared error of the null model (hint: see above)
+    "________________________________________________________",  # null model
+    squared_error1 = (pred1 - goal) ^ 2,
+    squared_error2 = (pred2 - goal) ^ 2
+  ) %>%
+  summarise(
+    rmse0 = sqrt(mean(squared_error0)),
+    rmse1 = sqrt(mean(squared_error1)),
+    rmse2 = sqrt(mean(squared_error2))
+  )
+```
+
+### Prediction
+
+```{r}
+hgoal_mean <- predict(
+  mod2,
+  tibble(
+    team = "Man United",
+    opponent = "Stoke",
+    ground = "Home"),
+  type = 'response'
+)
+
+agoal_mean <- predict(
+  mod2,
+  tibble(
+    team = "Stoke",
+    opponent = "Man United",
+    ground = "Away"),
+  type = 'response'
+)
+```
+
+```{r}
+# CKPT: How do `rep(1:3, times = 3)` and `rep(1:3, each = 3)` differ?
+```
+
+```{r}
+outcome_probs <- tibble(
+  hgoal = rep(0:MAX_GOALS, each = MAX_GOALS + 1),
+  agoal = rep(0:MAX_GOALS, times = MAX_GOALS + 1)
+) %>%
+  mutate(prob = round(dpois(hgoal, hgoal_mean) * dpois(agoal, agoal_mean), 2))
+```
+
+```{r}
+# CKPT: What does `outcome_probs` look like?
+```
+
+```{r}
+# TODO: Create the plot at the start of the help guide using `outcome_probs`
+"___________" %>%  # dataframe
+  "_______________________" +  # base ggplot layer
+    "_________________________" +  # tile geometry
+    "___________________________________________________" + # text geometry
+    "_______________________________________________________________________"  # labels
+```

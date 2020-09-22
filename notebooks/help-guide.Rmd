@@ -1,0 +1,33 @@
+---
+title: "Football Match Score Prediction"
+subtitle: "Help Guide"
+output:
+  html_notebook: default
+---
+
+## The Goal
+
+![Goal](../resources/goal.png)
+## Part One
+
+### Fundamentals
+
+### The Tidyverse
+
+#### `purrr`
+
+#### `dplyr`
+
+- Summarising
+
+#### `ggplot2`
+
+## Part Two
+
+### Regression
+
+### Evaluating Errors
+
+### Prediction
+
+### Next Steps

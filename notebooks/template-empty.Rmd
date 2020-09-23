@@ -11,9 +11,8 @@ output:
 
 ```{r message=FALSE}
 library(dplyr)  # data manipulation
-library(ggplot2)  # visualisation
-# TODO: Import the package `tidyr` for the purpose of "tidying data"
-"____________________________"
+# TODO: Import the package `tidyr` for the purpose of "visualisation"
+"_______________________________"
 ```
 
 ### Graphical Settings
@@ -36,7 +35,7 @@ SEED <- 123  # random seed to ensure reproducibility
 
 ### Import
 
-```{r warning=FALSE}
+```{r}
 # Import data set (Premier League 2016/17-2018/19)
 # Data source: https://www.football-data.co.uk/englandm.php
 match_data <- tibble(read.csv(DATA_PATH))

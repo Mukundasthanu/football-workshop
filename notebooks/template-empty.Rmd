@@ -11,7 +11,7 @@ output:
 
 ```{r message=FALSE}
 library(dplyr)  # data manipulation
-# TODO: Import the package `tidyr` for the purpose of "visualisation"
+# TODO: Import the package `ggplot2` for the purpose of "visualisation"
 "_______________________________"
 ```
 

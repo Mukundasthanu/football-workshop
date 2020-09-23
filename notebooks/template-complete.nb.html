@@ -1756,12 +1756,9 @@ summary {
 <h3>Package Import</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkcGx5cikgICMgZGF0YSBtYW5pcHVsYXRpb25cbmxpYnJhcnkoZm9vdGJhbGxkYXRyKSAgIyBmb290YmFsbCBkYXRhXG5saWJyYXJ5KGdncGxvdDIpICAjIHZpc3VhbGlzYXRpb25cbmxpYnJhcnkocHVycnIpICAjIGl0ZXJhdGlvblxubGlicmFyeSh0aWR5cikgICMgdGlkeWluZyBkYXRhXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkcGx5cikgICMgZGF0YSBtYW5pcHVsYXRpb25cbmxpYnJhcnkoZ2dwbG90MikgICMgdmlzdWFsaXNhdGlvblxuYGBgIn0= -->
 <pre class="r"><code>library(dplyr)  # data manipulation
-library(footballdatr)  # football data
-library(ggplot2)  # visualisation
-library(purrr)  # iteration
-library(tidyr)  # tidying data</code></pre>
+library(ggplot2)  # visualisation</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1781,9 +1778,8 @@ theme_set(theme_minimal(base_size = 14))</code></pre>
 <h3>Parameters</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuWUVBUlMgPC0gMjAxNjoyMDE4ICAjIDIwMTYgcmVwcmVzZW50cyB0aGUgMjAxNi8xNyBzZWFzb25cbkRJVklTSU9OIDwtIDAgICMgMCA9IFByZW1pZXIgTGVhZ3VlOyA0ID0gQ29uZmVyZW5jZSBMZWFndWVcbk1BWF9HT0FMUyA8LSA3ICAjIG1heGltdW0gbnVtYmVyIG9mIGdvYWxzIHRvIHByZWRpY3QgcHJvYmFiaWxpdHkgb2ZcblNFRUQgPC0gMTIzICAjIHJhbmRvbSBzZWVkIHRvIGVuc3VyZSByZXByb2R1Y2liaWxpdHlcbmBgYCJ9 -->
-<pre class="r"><code>YEARS &lt;- 2016:2018  # 2016 represents the 2016/17 season
-DIVISION &lt;- 0  # 0 = Premier League; 4 = Conference League
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuREFUQV9QQVRIIDwtIFwiLi4vcmVzb3VyY2VzL21hdGNoX2RhdGEuY3N2XCJcbk1BWF9HT0FMUyA8LSA3ICAjIG1heGltdW0gbnVtYmVyIG9mIGdvYWxzIHRvIHByZWRpY3QgcHJvYmFiaWxpdHkgb2ZcblNFRUQgPC0gMTIzICAjIHJhbmRvbSBzZWVkIHRvIGVuc3VyZSByZXByb2R1Y2liaWxpdHlcbmBgYCJ9 -->
+<pre class="r"><code>DATA_PATH &lt;- &quot;../resources/match_data.csv&quot;
 MAX_GOALS &lt;- 7  # maximum number of goals to predict probability of
 SEED &lt;- 123  # random seed to ensure reproducibility</code></pre>
 <!-- rnb-source-end -->
@@ -1951,7 +1947,7 @@ test_data %&gt;%
     rmse1 = sqrt(mean(squared_error1))
   )</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6MSwibmNvbCI6Mn0sInJkZiI6Ikg0c0lBQUFBQUFBQUF3dHlpVERtaXVCaVlHQmdabUJoWUdKZ1pnVXlHVmhEUTl4MExSZ1lXSmlBSEVhZ0JDZUlyZ0FxRWdZeVFJSjhJQUg3citjUzlscnVaSWZ6UDdmcHo5M1B2QnROSTJ0ZVltNXFNWkFoQU5ZTUZTektMVTQxUU9ZWW9tbmpMTW92MTROcDVRVnBiUUFTLzRFQTNmemtuTVJpbVBrd1FhNlV4SkpFdmJRaW9INGc3eCthRnZiOGdwTE0vRHlnSmlhUWoxalJORE1Xb1FrSWxPYUJYSktpbTV4Um1wZXRhMmdNc2dFc0R3RzhVRFlqRXBzSllpZlRmNmhackZDejJGTHowalB6VW1HT3owbE1TczJCY3ZpQVhnYjdXSytnS0RPdkJPWVZvR2l4WGtsK1NTSk1IVmR5Zmc1TUJPdzVobjhBSGlwZVJza0JBQUE9In0= -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6MSwibmNvbCI6Mn0sInJkZiI6Ikg0c0lBQUFBQUFBQUF3dHlpVERtaXVCaVlHQmdabUJoWUdKZ1pnVXlHVmhEUTl4MExSZ1lXSmlBSEVhZ0JDZUlyZ0FxRWdZeVFJSjhJQUg3citjUzlscnVaSWZ6UDdmcHo5M1B2QnROSTJ0ZVltNXFNWkFoQU5ZTUZTektMVTQxUU9ZWW9tbmpMTW92MTROcDVRVnBiUUFTLzRFQTNmemtuTVJpbVBrd1FhNlV4SkpFdmJRaW9INGc3eCthRnZiOGdwTE0vRHlnSmlhUWoxalJORE1Xb1FrSWxPYUJYSktpbTV4Um1wZXRhMmdFc2dFc0R3RzhVRFlqRXBzSllpZlRmNmhackZDejJGTHowalB6VW1HT3owbE1TczJCY3ZpQVhnYjdXSytnS0RPdkJPWVZvR2l4WGtsK1NTSk1IVmR5Zmc1TUJPdzVobjhBUEFnQUpja0JBQUE9In0= -->
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["rmse0"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["rmse1"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"1.362885","2":"1.22026"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[1]},"pages":{}}}
@@ -2013,7 +2009,7 @@ test_data %&gt;%
     rmse2 = sqrt(mean(squared_error2))
   )</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6MSwibmNvbCI6M30sInJkZiI6Ikg0c0lBQUFBQUFBQUF3dHlpVERtaXVCaVlHQmdabUJoWUdKZ1pnVXlHVmhEUTl4MExSZ1lXSmlBSEVhZ0JDZUlyZ0FxRWdhclpHRGdBd25ZZnoyWHNOZHlKenVjLzdsTmYrNSs1dDF3L3FkcmtucTNuZDZqR2NTYWw1aWJXZ3hrQ0VDdEJRc1c1UmFuR2lCekRKRTVSbWhtY0JibGwrdkJ6T0VGWXFZR0lQRWZDTkF0Uzg1SkxJWlpCaFBrU2trc1NkUkxLd0xxQi9MK29XbGh6eThveWN6UEEycGlBbm1YRlUwell4R2FnRUJwSHNnbEtickpHYVY1MmJxR1ppQWJ3UElRd0F0bE15S3htU0YyTXYySG1zVUtOWXN0TlM4OU15OFY1dmljeEtUVUhDaUhEK2hsc0kvMUNvb3k4MHBnWGdHS0Z1dVY1SmNrd3RSeEplZm53RVRBbm1QNEJ3QmNhWmtONWdFQUFBPT0ifQ== -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6MSwibmNvbCI6M30sInJkZiI6Ikg0c0lBQUFBQUFBQUF3dHlpVERtaXVCaVlHQmdabUJoWUdKZ1pnVXlHVmhEUTl4MExSZ1lXSmlBSEVhZ0JDZUlyZ0FxRWdhclpHRGdBd25ZZnoyWHNOZHlKenVjLzdsTmYrNSs1dDF3L3FkcmtucTNuZDZqR2NTYWw1aWJXZ3hrQ0VDdEJRc1c1UmFuR2lCekRKRTVSbWhtY0JibGwrdkJ6T0VGWXFZR0lQRWZDTkF0Uzg1SkxJWlpCaFBrU2trc1NkUkxLd0xxQi9MK29XbGh6eThveWN6UEEycGlBbm1YRlUwell4R2FnRUJwSHNnbEtickpHYVY1MmJxR3BpQWJ3UElRd0F0bE15S3htU0YyTXYySG1zVUtOWXN0TlM4OU15OFY1dmljeEtUVUhDaUhEK2hsc0kvMUNvb3k4MHBnWGdHS0Z1dVY1SmNrd3RSeEplZm53RVRBbm1QNEJ3QTZEM3VvNWdFQUFBPT0ifQ== -->
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["rmse0"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["rmse1"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["rmse2"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"1.362885","2":"1.22026","3":"1.17727"}],"options":{"columns":{"min":{},"max":[10],"total":[3]},"rows":{"min":[10],"max":[10],"total":[1]},"pages":{}}}

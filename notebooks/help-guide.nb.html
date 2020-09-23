@@ -1809,6 +1809,9 @@ summary {
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJpbnQocGxheWVycylcbmBgYCJ9 -->
 <pre class="r"><code>print(players)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDExXG4ifQ== -->
+<pre><code>[1] 11</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
@@ -1823,6 +1826,9 @@ summary {
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJpbnQocGxheWVycylcbmBgYCJ9 -->
 <pre class="r"><code>print(players)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDEwXG4ifQ== -->
+<pre><code>[1] 10</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>Be careful! RStudio lets you run cells out of order. It is advised to run things from top to bottom only to avoid confusion. To run multiple cells, look in the <code>Run</code> dropdown above the notebook pane.</p>
@@ -1837,6 +1843,9 @@ summary {
 <pre class="r"><code>greeting &lt;- &#39;Hello&#39;
 print(greeting)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiSGVsbG9cIlxuIn0= -->
+<pre><code>[1] &quot;Hello&quot;</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
@@ -1845,6 +1854,9 @@ print(greeting)</code></pre>
 <pre class="r"><code>greeting &lt;- &quot;Hello&quot;
 print(greeting)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiSGVsbG9cIlxuIn0= -->
+<pre><code>[1] &quot;Hello&quot;</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
@@ -1852,6 +1864,9 @@ print(greeting)</code></pre>
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ3JlZXRpbmcgPC0gSGVsbG9cbmBgYCJ9 -->
 <pre class="r"><code>greeting &lt;- Hello</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3I6IG9iamVjdCAnSGVsbG8nIG5vdCBmb3VuZFxuIn0= -->
+<pre><code>Error: object &#39;Hello&#39; not found</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1968,13 +1983,6 @@ mutate(presidential, title = &quot;President&quot;)</code></pre>
 <p>The tidyverse is tied together by an operator known as the pipe, <code>%&gt;%</code>. This takes the output of one function and passes it as the input to the next. This allows us to create chains of functions (pipelines) to perform multiple processing steps on our data. An example of this is shown below (don’t worry about the exact details; the flow of data is what matters).</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXBnICU+JVxuICBmaWx0ZXIoeWVhciA9PSAxOTk5KSAlPiVcbiAgbXV0YXRlKGh3eV9rbV9nID0gaHd5ICogMS42MSkgJT4lXG4gIGdyb3VwX2J5KGNsYXNzKSAlPiVcbiAgc3VtbWFyaXNlKGF2Z19od3lfa21fZyA9IG1lYW4oaHd5X2ttX2cpLCAuZ3JvdXBzID0gJ2Ryb3AnKVxuYGBgIn0= -->
-<pre class="r"><code>mpg %&gt;%
-  filter(year == 1999) %&gt;%
-  mutate(hwy_km_g = hwy * 1.61) %&gt;%
-  group_by(class) %&gt;%
-  summarise(avg_hwy_km_g = mean(hwy_km_g), .groups = &#39;drop&#39;)</code></pre>
-<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>We see here an example of the <code>summarise()</code> function which we use to collapse down a dataframe into one value per group. This will be used in the template but examples will be given.</p>

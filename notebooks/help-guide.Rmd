@@ -204,11 +204,11 @@ mpg %>%
 
 _Live explanation_
 
-[Linear regression](../resources/linear_regression.svg)
+![Linear regression](../resources/linear_regression.svg)
 
-[Poisson distribution](../resources/poisson_pmf.svg)
+![Poisson distribution](../resources/poisson_pmf.svg)
 
-[Natural logarithm](../resources/natural_log.gif)
+![Natural logarithm](../resources/natural_log.gif)
 
 We can fit a Poisson regression model by using the `glm` function. We pass in a formula with the variable we're trying to predict on the left of a tilde (~) and the predictors we're using on the right separated by `+`s. We set the `family` equal to `poisson(link = log)` and pass in data to train on as the `data` input. In all, this looks like this:
 
